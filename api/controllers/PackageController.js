@@ -1,7 +1,7 @@
 const express = require("express");
 const { PrismaClient, Prisma } = require("@prisma/client");
 const app = express();
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 const prisma = new PrismaClient();
 Prisma.PrismaClientKnownRequestError;
@@ -25,7 +25,16 @@ app.get("/package/list", async (req, res) => {
 app.post("/package/users", async (req, res) => {
   try {
     const { email, username, password, packageId } = req.body;
-    const passwordHash = await  bcrypt.hash(password,10);
+
+    const checke_mail = await prisma.users.findMany({
+      where: { email: email },
+    });
+
+    if (checke_mail.length > 0) {
+        return res.status(400).json({ message: "Email already exists." });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
     const results = await prisma.users.create({
       data: {
         email: email,
