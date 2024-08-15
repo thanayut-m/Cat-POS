@@ -8,12 +8,20 @@ datasource db {
 }
 
 model Package {
-  id Int @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   package_name String
-  bill_amount Int
-  price Int
+  bill_amount  Int
+  price        Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Users {
+  user_id   Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String
+  password  String
+  packageId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-
