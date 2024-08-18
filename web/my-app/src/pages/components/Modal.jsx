@@ -1,7 +1,7 @@
 function Modal(props) {
     return (
-        <>
-            <div className="modal" id={props.id} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div>
+            <div className="modal" id={props.id} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -15,7 +15,7 @@ function Modal(props) {
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 export default Modal;

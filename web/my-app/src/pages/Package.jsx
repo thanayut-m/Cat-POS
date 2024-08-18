@@ -3,13 +3,15 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import config from './../config';
 import Modal from "./components/Modal";
+import Swal from 'sweetalert2';
 
 function Package() {
   const [packages, setPackages] = useState([]);
   const [yourPackages, setYourPackages] = useState({});
-  const [packageName, setPackageName] = useState();
-  const [billAmount, setBillAmount] = useState();
-  const [price, setPrice] = useState();
+  const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
+  const [storeName, setStoreName] = useState();
+  const [username, setUesrname] = useState();
 
   useEffect(() => {
     fetchDataPackage();
@@ -22,8 +24,8 @@ function Package() {
       }).catch(err => {
         throw err.response.data;
       });
-    } catch (e) {
-      console.log({ message: e.message });
+    } catch (err) {
+      console.log({ message: err.message });
     }
   }
 
@@ -31,8 +33,52 @@ function Package() {
     setYourPackages(item);
   }
 
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    try {
+      Swal.fire({
+        title: "ยืนยันการสมัคร",
+        text: "โปรดยืนยันการสมัครใช้บริการ Package",
+        icon: 'question',
+        showCancelButton: true,
+        showConfirmButton: true
+      }).then(async (res) => { 
+        if (res.isConfirmed) {
+          try {
+            const payload = {
+              packageId: yourPackages.id,
+              username,
+              storeName,
+              email,
+              password
+            };
+
+            const response = await axios.post(config.api_path + '/package/users', payload);
+
+            if (response.data.message === 'success') {
+              Swal.fire({
+                title: "บันทึกข้อมูล",
+                text: "บันทึกข้อมูลการสมัครแล้ว",
+                icon: 'success',
+                timer: 2000
+              });
+            }
+          } catch (err) {
+            Swal.fire({
+              title: "Error1",
+              text: err.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
+              icon: "error"
+            });
+          }
+        }
+      });
+    } catch (err) {
+      console.log({ message: err.message });
+    }
+  };
+
   return (
-    <>
+    <div>
       <div className="container mt-2">
         <div className="text-center">
           <div className="h2 text-">CatPOS : point Of Sale On cloud</div>
@@ -62,20 +108,24 @@ function Package() {
           </div>
           <div className="mt-2">
             <label htmlFor="">ชื่อร้าน</label>
-            <input className="mt-1 form-control" type="text" />
+            <input className="mt-1 form-control" type="text" onChange={e => setStoreName(e.target.value)} />
+          </div>
+          <div className="mt-2">
+            <label htmlFor="">ชื่อ</label>
+            <input className="mt-1 form-control" type="text" onChange={e => setUesrname(e.target.value)} />
           </div>
           <div className="mt-2">
             <label htmlFor="">E-mail</label>
-            <input className="mt-1 form-control" type="email" />
+            <input className="mt-1 form-control" type="email" onChange={e => setEmail(e.target.value)} />
           </div>
           <div className="mt-2">
             <label htmlFor="">รหัสผ่าน</label>
-            <input className="mt-1 form-control" type="password" />
+            <input className="mt-1 form-control" type="password" onChange={e => setPassword(e.target.value)} />
           </div>
           <div className="mt-4">
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-              <button type="button" className="btn btn-primary">ยืนยันการสมัคร
+              <button onClick={handleSignUp} type="button" className="btn btn-primary">ยืนยันการสมัคร
                 {/* <i className="fa fa-arrow-right "></i> */}
               </button>
             </div>
@@ -83,7 +133,7 @@ function Package() {
         </form>
 
       </Modal>
-    </>
+    </div>
   );
 }
 
