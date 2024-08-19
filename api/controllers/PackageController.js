@@ -56,12 +56,15 @@ app.post("/package/check-email", async (req, res) => {
     return res.status(400).json({ error: "Email is required" });
   }
 
-  const emailLowerCase = email.toLowerCase();
+//   const emailLowerCase = email ? email.toLowerCase() : null;
+//   console.log("Email being searched:", emailLowerCase);
 
   try {
     const user = await prisma.users.findUnique({
-      where: { email: emailLowerCase },
+      where: { email: email },
     });
+
+    console.log("User found:", user);
 
     if (user) {
       return res.json({ exists: true });
@@ -72,5 +75,4 @@ app.post("/package/check-email", async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 });
-
 module.exports = app;

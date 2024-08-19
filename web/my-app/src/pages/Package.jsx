@@ -49,12 +49,13 @@ function Package() {
       const response = await axios.post(config.api_path + `/package/check-email`, { email });
 
       if (response.status === 200) {
-        if (response.data.exists) {
+        if (response.data.exists === true) {
           console.log("อีเมลนี้ถูกใช้งานแล้ว");
-          return false;
+          console.log(response.data.exists);
+          return true;
         } else {
           console.log("อีเมลนี้ยังไม่ถูกใช้งาน");
-          return true;
+          return false;
         }
       } else {
         console.error("เกิดข้อผิดพลาดในการตรวจสอบอีเมลล์");
@@ -71,7 +72,6 @@ function Package() {
 
     const emailExists = await checkEmailExists(email);
     if (emailExists) {
-      console.log("อีเมลนี้ถูกใช้งานแล้ว");
       setEmailError("อีเมลนี้ถูกใช้งานแล้ว");
       return;
     }
@@ -109,6 +109,7 @@ function Package() {
                 icon: 'success',
                 timer: 2000
               });
+              document.getElementById('btnModalClose').click();
             }
           } catch (err) {
             Swal.fire({
@@ -152,7 +153,7 @@ function Package() {
       <Modal id="modalSignUp" title="สมัครใช้บริการ">
         <form action="">
           <div>
-            <div className="alert alert-info">{yourPackages.package_name} ราคา {yourPackages.price} </div>
+            <div className="alert alert-info">{yourPackages.package_name}&nbsp;ราคา&nbsp;{yourPackages.price}&nbsp;บาท </div>
           </div>
           <div className="mt-2">
             <label htmlFor="">E-mail</label>
