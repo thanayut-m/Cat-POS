@@ -3,6 +3,7 @@ import axios from 'axios';
 import config from './../config';
 import Modal from "./components/Modal";
 import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
 
 function Package() {
   const [packages, setPackages] = useState([]);
@@ -19,6 +20,8 @@ function Package() {
   const [username, setUsername] = useState('');
   const [first_Name, setFirst_Name] = useState('');
   const [last_Name, setLast_Name] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchDataPackage();
@@ -110,10 +113,12 @@ function Package() {
                 timer: 2000
               });
               document.getElementById('btnModalClose').click();
+
+              navigate('/login');
             }
           } catch (err) {
             Swal.fire({
-              title: "Error1",
+              title: "Error",
               text: err.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
               icon: "error"
             });
