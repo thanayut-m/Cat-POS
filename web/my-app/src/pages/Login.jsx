@@ -2,11 +2,16 @@ import { useState } from "react";
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import config from './../config';
+import { useNavigate } from "react-router-dom";
+
+
 
 function Login() {
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+
+    const navigate = useNavigate();
 
     const handleSignIn = async (e) => {
         try {
@@ -22,13 +27,9 @@ function Login() {
                         icon: "success",
                         timer: 2000
                     });
-                } else {
-                    Swal.fire({
-                        title: "เข้าสู่ระบบ",
-                        text: "ไม่พบข้อมูลในระบบ",
-                        icon: "warning",
-                        timer: 2000
-                    });
+                    localStorage.setItem(config.token_name, res.data.token);
+
+                    navigate('/home');
                 }
             }).catch(err => {
                 throw err.response.data;

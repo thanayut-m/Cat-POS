@@ -2,6 +2,8 @@ const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const app = express();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const prisma = new PrismaClient();
 
@@ -20,9 +22,10 @@ app.post("/member/signin", async (req, res) => {
     });
 
     if (member && (await bcrypt.compare(password, member.password))) {
-      return res.json({ id: member.id, message: "success" });
+      let token = jwt.sign({ id: member.id }, process.env.secret);
+      return res.json({ token: token, message: "success" });
     } else {
-      res.status(401).json({ message: "Not Found." });
+      return res.status(401).json({ message: "อีเมลหรือรหัสผ่านไม่ถูกต้อง" });
     }
   } catch (err) {
     console.log(err);
