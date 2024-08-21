@@ -1,7 +1,11 @@
+
+import Template from './components/Template';
 function Home() {
     return (
         <div>
-            page Home
+            <Template >
+
+            </Template>   
         </div>
     )
 }
