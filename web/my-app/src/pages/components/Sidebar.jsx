@@ -29,11 +29,11 @@ function Sidebar() {
     return (
         <div>
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
-                <a href="index3.html" className="-link">
+                <a href="index3.html" className="brand-link">
                     <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{ opacity: '.8' }} />
-                    <span className=" font-weight-light">Cat-POS</span>
+                    <span className="brand-text font-weight-light">Cat-POS</span>
                 </a>
-
+                
                 <div className="sidebar">
                     <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div className="image">

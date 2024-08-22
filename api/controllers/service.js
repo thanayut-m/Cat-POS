@@ -10,19 +10,15 @@ module.exports = {
       const token = req.headers.authorization.replace("Bearer ", "");
       const secret = process.env.secret;
 
-      if (token) {
         try {
           const verify = jwt.verify(token, secret);
           if (verify) {
             return next();
           }
         } catch (err) {
-          return res.status(401).json({ error: "Authorization failed" });
         }
+      } else {
+        return res.status(401).json({ error: "Authorization failed" });
       }
-      return res
-        .status(401)
-        .json({ error: "Authorization header missing or invalid" });
-    }
   },
 };
