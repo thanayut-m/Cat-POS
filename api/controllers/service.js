@@ -10,15 +10,21 @@ module.exports = {
       const token = req.headers.authorization.replace("Bearer ", "");
       const secret = process.env.secret;
 
-        try {
-          const verify = jwt.verify(token, secret);
-          if (verify) {
-            return next();
-          }
-        } catch (err) {
+      try {
+        const verify = jwt.verify(token, secret);
+        if (verify) {
+          return next();
         }
-      } else {
-        return res.status(401).json({ error: "Authorization failed" });
-      }
+      } catch (err) {}
+    } else {
+      return res.status(401).json({ error: "Authorization failed" });
+    }
+  },
+  getMemberId: async (req) => {
+    const jwt = require("jsonwebtoken");
+    
+    const token = req.headers.authorization.replace("Bearer ", "");
+    const payload = jwt.decode(token);
+    return payload.user_id
   },
 };

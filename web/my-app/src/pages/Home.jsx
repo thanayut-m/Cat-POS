@@ -4,7 +4,6 @@ function Home() {
     return (
         <div>
             <Template >
-                asdasdasd
             </Template>   
         </div>
     )

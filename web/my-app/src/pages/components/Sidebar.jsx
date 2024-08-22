@@ -13,7 +13,7 @@ function Sidebar() {
 
     const fetchData = async () => {
         try {
-            axios.get(config.api_path + '/member/info', config.headers).then(res => {
+            axios.get(config.api_path + '/member/info', config.headers()).then(res => {
                 if (res.data.message === 'success') {
                     setMemberName(res.data.result.username);
                     setPackageName(res.data.result.package.package_name);
@@ -40,7 +40,8 @@ function Sidebar() {
                             <img src="dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
                         </div>
                         <div className="info">
-                            <div className="text-white">{memberName}</div>
+                            <div className="text-white">ชื่อร้านค้า : </div>
+                            <div className="text-white">ชื่อผู้ใช้ : {memberName}</div>
                             <div className="text-white">Package : {packageName}</div>
                         </div>
                     </div>
