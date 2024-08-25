@@ -2,8 +2,7 @@ import Template from "./components/Template";
 import axios from 'axios';
 import config from '../config';
 import { useEffect, useState } from "react";
-import Swal  from 'sweetalert2';
-import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 function Profile() {
     const [memberName, setMemberName] = useState();
@@ -35,10 +34,10 @@ function Profile() {
             await axios.put(config.api_path + '/member/changeProfile', payload, config.headers()).then(res => {
                 if (res.data.message === "success") {
                     Swal.fire({
-                        title : "บันทึกข้อมูล",
+                        title: "บันทึกข้อมูล",
                         text: "เปลี่ยนแปลงข้อมูลร้านของคุณแล้ว",
-                        icon : "success",
-                        timer : 2000
+                        icon: "success",
+                        timer: 2000
                     })
 
                 }
@@ -46,24 +45,26 @@ function Profile() {
         } catch (err) {
             console.log({ message: err.message });
             Swal.fire({
-                title : "Error",
-                text: err.message ,
-                icon : "error"
+                title: "Error",
+                text: err.message,
+                icon: "error"
             })
         }
-    }
+    } 
 
     return (
         <div>
-            <Template></Template>
-            <div className="container">
-                <label htmlFor="">ร้านค้า</label>
-                <input type="text" value={memberName} onChange={(e) => setMemberName(e.target.value)} />
-            </div>
-            <div className="mt-3">
-                <button className="btn btn-primary" onClick={handleChangeProfile}>save</button>
-            </div>
+            <Template>
+                <div className="container">
+                    <label htmlFor="">ร้านค้า</label>
+                    <input type="text" value={memberName} onChange={(e) => setMemberName(e.target.value)} />
+                </div>
+                <div className="mt-3">
+                    <button className="btn btn-primary" onClick={handleChangeProfile}>save</button>
+                </div>
+            </Template>
         </div>
+
     )
 }
 export default Profile;

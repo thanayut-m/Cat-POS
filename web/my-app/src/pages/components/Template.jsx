@@ -1,12 +1,21 @@
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
-function Template() {
+function Template(props) {
     return (
         <div>
-            <Navbar />
-            <Sidebar />
+            <div className="wrapper">
+                <Navbar />
+                <Sidebar />
+                <div className="content-wrapper pt-3">
+                    <section className="content">
+                        {props.children}
+                    </section>
+                </div>
+            </div>
         </div>
+
+
     )
 }
 

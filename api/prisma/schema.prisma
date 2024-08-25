@@ -29,3 +29,15 @@ model Users {
 
   package Package @relation(fields: [packageId],references: [id])
 }
+
+model Products {
+  products_id  Int @id @default(autoincrement())
+  products_barcode String
+  products_name String
+  products_cost Int
+  products_price Int
+  products_detail String?
+  products_createdAt DateTime @default(now())
+  products_updatedAt DateTime @updatedAt
+
+}

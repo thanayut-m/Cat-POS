@@ -8,7 +8,8 @@ import {
 import Package from './pages/Package.jsx'
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Profile from './pages/Profile.jsx';
+import Profile from './pages/Profile';
+import Product from './pages/Product';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <Home />,
+  },
+  {
+    path: "/product",
+    element: <Product />
   },
 ]);
 
