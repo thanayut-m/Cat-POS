@@ -5,28 +5,9 @@ const service = require("./service");
 
 const prisma = new PrismaClient();
 
-app.post("/product/insert", service.isLogin, async (req, res) => {
+app.post("/product/inserts", service.isLogin, async (req, res) => {
   try {
-    const {
-      productBarcode,
-      productName,
-      productCost,
-      productPrice,
-      productDetail,
-    } = req.body;
-
-    if (!productBarcode || !productName || !productCost || !productPrice) {
-      return res.status(400).json({ message: "ข้อมูลที่จำเป็นต้องกรอกไม่ครบ" });
-    }
-    const result = await prisma.products.create({
-      data: {
-        products_barcode: productBarcode,
-        products_name: productName,
-        products_price: productPrice,
-        products_cost: productCost,
-        products_detail: productDetail || null,
-      },
-    });
+    const result = await prisma.products.create({ data: req.body });
     res.json({ result: result, message: "success" });
   } catch (err) {
     console.log(err);
@@ -44,37 +25,34 @@ app.get("/product/info", service.isLogin, async (req, res) => {
   }
 });
 
-app.put("/product/changeProduct",service.isLogin,async(req,res) => {
-    try {
-        const {products_id ,datatoUpdate} =req.body;
+app.post("/product/changeProduct", service.isLogin, async (req, res) => {
+  try {
 
-        const result = await prisma.products.update({
-            where : {
-                products_id : products_id
-            },
-            data: datatoUpdate
-        })
+    const result = await prisma.products.update({
+      where: {
+        products_id: req.body.products_id,
+      },
+      data :req.body
+    });
+    res.json({ message: "success", result: result });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
-        res.json({ message: "success", result: result });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-})
+app.delete("/product/deleteProduct/:id",service.isLogin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await prisma.products.delete({
+      where: {
+        products_id: parseInt(id),
+      },
+    });
 
-app.delete("/product/deleteProduct/:id",async (req,res ) => {
-    try {
-        const { id } = req.params;
-        const result = await prisma.products.delete({
-            where : {
-                products_id: parseInt(id),
-            }
-        });
-    
-        res.json({ result: result, message: "success" });
-      } catch (err) {
-        res.status(500).json({ message: err.message });
-      }
-})
-
+    res.json({ result: result, message: "success" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = app;
