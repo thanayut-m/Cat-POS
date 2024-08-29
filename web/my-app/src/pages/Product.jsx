@@ -9,6 +9,8 @@ import Modal from './components/Modal';
 function Product() {
     const [products, setProducts] = useState([]);
     const [product, setProduct] = useState({});
+    const [productImage, setProductImage] = useState({});
+    const [productImages, setProductImages] = useState([]);
 
     useEffect(() => {
         fetchDataProduct();
@@ -111,6 +113,44 @@ function Product() {
         })
     }
 
+    const handleChangeFile = (files) => {
+        setProductImage(files[0]);
+    }
+
+    const handleUploadProductImage = async () => {
+        try {
+            const _config = {
+                headers : {
+                'Authorization': 'Bearer ' + localStorage.getItem(config.token_name),
+                'Content-Type': 'multipart/form-data'
+                }
+            }
+
+            const formData = new FormData();
+            formData.append('productImage', productImage)
+            formData.append('productImageName', productImage.name)
+
+            await axios.post(config.api_path + '/productImage/inserts', formData, _config).then(res => {
+                if (res.data.message === 'success') {
+                    console.log('ok')
+                }
+                fetchDataProductImage();
+            })
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+
+    const fetchDataProductImage = async () => {
+        try {
+            await axios.get(config.api_path + 'productImage/list', config.headers()).then(res => {
+                setProductImage(res.data.result)
+            })
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+
     return (
         <div>
             <Template>
@@ -145,9 +185,9 @@ function Product() {
                                         <td>{item.products_detail}</td>
                                         <td>
                                             <div className='d-flex justify-content-center'>
-                                                {/* <button className="btn btn-primary mr-1">
-                                                    <i className='fa fa-eye'></i>
-                                                </button> */}
+                                                <button onClick={() => setProduct(item)} className="btn btn-primary mr-1" data-bs-toggle="modal" data-bs-target="#modalProductImage">
+                                                    <i className='fa fa-image'></i>
+                                                </button>
                                                 <button onClick={() => setProduct(item)} className="btn btn-primary mr-1" data-bs-toggle="modal" data-bs-target="#modalProduct">
                                                     <i className='fa fa-edit'></i>
                                                 </button>
@@ -194,6 +234,40 @@ function Product() {
                         </button>
                     </div>
                 </form>
+            </Modal>
+
+            <Modal id="modalProductImage" title="ภาพสินค้า" modalSize="modal-lg">
+                <div className="row">
+                    <div className="col-4">
+                        <div className="input-group">
+                            <div className="input-group-text">Barcode</div>
+                            <input value={product.products_barcode} disabled className='form-control' />
+                        </div>
+                    </div>
+                    <div className="col-8">
+                        <div className="input-group">
+                            <div className="input-group-text">ชื่อสินค้า</div>
+                            <input value={product.products_name} disabled className='form-control' />
+                        </div>
+                    </div>
+
+                    <div className="col-12 mt-3">
+                        <div>เลือกภาพสินค้า</div>
+                        <input onChange={e => handleChangeFile(e.target.files)} type='file' name='imageName' className='form-control' />
+                    </div>
+                    {productImage.name !== undefined ?
+                        <div>File : {productImage.name}</div>
+                        : ''}
+                </div>
+
+                <div className="mt-3 d-flex justify-content-end">
+                    {productImage.name !== undefined ?
+                        <button onClick={handleUploadProductImage} className="btn btn-primary">
+                            <i className="fa fa-check mr-2"></i>
+                            Upload And Save
+                        </button>
+                        : ''}
+                </div>
             </Modal>
         </div>
     )

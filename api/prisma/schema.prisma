@@ -27,17 +27,25 @@ model Users {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  package Package @relation(fields: [packageId],references: [id])
+  package Package @relation(fields: [packageId], references: [id])
 }
 
 model Products {
-  products_id  Int @id @default(autoincrement())
-  products_barcode String
-  products_name String
-  products_cost Int
-  products_price Int
-  products_detail String?
+  products_id        Int      @id @default(autoincrement())
+  products_barcode   String
+  products_name      String
+  products_cost      Int
+  products_price     Int
+  products_detail    String?
   products_createdAt DateTime @default(now())
   products_updatedAt DateTime @updatedAt
+}
 
+model ProductImage {
+  ProductImage_id      Int      @id @default(autoincrement())
+  productimage_Name    String
+  productimage_is_main Boolean
+  products_id          Int
+  products_createdAt   DateTime @default(now())
+  products_updatedAt   DateTime @updatedAt
 }
